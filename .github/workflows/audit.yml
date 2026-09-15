@@ -1,0 +1,35 @@
+name: Audit casks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: macos-latest
+    steps:
+      - name: Tap this repository
+        run: brew tap vh-technology/tap "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+
+      - name: Check out the ref under test into the tap
+        uses: actions/checkout@v4
+        with:
+          path: tap-src
+
+      - name: Sync tap with checked-out ref
+        run: |
+          set -euo pipefail
+          tap_dir="$(brew --repository vh-technology/tap)"
+          rsync -a --delete --exclude .git tap-src/ "$tap_dir/"
+
+      - name: brew style
+        run: brew style vh-technology/tap
+
+      - name: brew audit
+        run: |
+          set -euo pipefail
+          for cask in Casks/*.rb; do
+            token="$(basename "$cask" .rb)"
+            brew audit --cask --online "vh-technology/tap/$token"
+          done

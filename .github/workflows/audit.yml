@@ -8,6 +8,13 @@ on:
 jobs:
   audit:
     runs-on: macos-latest
+    env:
+      # `brew audit --online` queries the GitHub API (livecheck, release
+      # lookups). Unauthenticated requests share the runner IP's 60/hour
+      # budget and get rate-limited; the job token lifts that.
+      HOMEBREW_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      HOMEBREW_NO_INSTALL_CLEANUP: "1"
+      HOMEBREW_NO_ENV_HINTS: "1"
     steps:
       - name: Tap this repository
         run: brew tap vh-technology/tap "$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"

@@ -1,6 +1,6 @@
 cask "bluemacaw" do
-  version "1.2.2"
-  sha256 "8ef8e1263dfe0ef87ad8ab442c2ace2e30b6298d68c459a160be9d0d65235fa1"
+  version "1.2.3"
+  sha256 "9e2dda8a2207500a275f0cfadef936cd1e0f46ff1645d259b10339a122b5df62"
 
   url "https://github.com/VH-Technology/bluemacaw/releases/download/v#{version}/bluemacaw_#{version}_universal.dmg"
   name "bluemacaw"
